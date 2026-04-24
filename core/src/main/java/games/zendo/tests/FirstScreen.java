@@ -57,12 +57,24 @@ public class FirstScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Draw your screen here. "delta" is the time since last render in seconds.
         pos.add(vel.x * delta, vel.y * delta);
+
+        // Bouncy bouncy
         var right = pos.x + sprite.getWidth();
         var top   = pos.y + sprite.getHeight();
-        if (pos.x < worldBounds.x || right > worldBounds.x + worldBounds.width)  { vel.x *= -1; speed = MathUtils.random(minSpeed, maxSpeed); vel.nor().scl(speed); }
-        if (pos.y < worldBounds.y || top   > worldBounds.y + worldBounds.height) { vel.y *= -1; speed = MathUtils.random(minSpeed, maxSpeed); vel.nor().scl(speed); }
+        if (pos.x <= worldBounds.x || right >= worldBounds.x + worldBounds.width)  {
+            pos.x = MathUtils.clamp(pos.x, worldBounds.x, worldBounds.x + worldBounds.width);
+            speed = MathUtils.random(minSpeed, maxSpeed);
+            vel.x *= -1;
+            vel.nor().scl(speed);
+        }
+        if (pos.y <= worldBounds.y || top   >= worldBounds.y + worldBounds.height) {
+            pos.y = MathUtils.clamp(pos.y, worldBounds.y, worldBounds.y + worldBounds.height);
+            speed = MathUtils.random(minSpeed, maxSpeed);
+            vel.y *= -1;
+            vel.nor().scl(speed);
+        }
+
         sprite.setPosition(pos.x, pos.y);
 
         ScreenUtils.clear(Color.DARK_GRAY);
