@@ -55,6 +55,7 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
   implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+  implementation "com.github.kotcrab.vis-ui:vis-ui:$visUiVersion:sources"
   implementation "com.google.jsinterop:jsinterop-annotations:2.1.0:sources"
   implementation project(':core')
 
