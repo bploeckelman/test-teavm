@@ -41,9 +41,9 @@ public class Main extends Game {
         // - LWJGL3: GdxRuntimeException: Couldn't load dependencies of asset: does-not-exist.png
         // - GWT: GdxRuntimeException: Could not submit AsyncTask: Couldn't load image 'does-not-exist.png', file does not exist
         // - TeaVM: black screen, infinite loop, browser hangs
-//        var mgr = new AssetManager();
-//        mgr.load("does-not-exist.png", Texture.class);
-//        mgr.finishLoading();
+        var mgr = new AssetManager();
+        mgr.load("does-not-exist.png", Texture.class);
+        mgr.finishLoading();
         // --------------------------------------------------------------------
 
         setScreen(new FirstScreen());
