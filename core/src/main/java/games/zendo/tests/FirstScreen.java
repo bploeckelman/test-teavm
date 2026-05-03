@@ -1,17 +1,26 @@
 package games.zendo.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.widget.VisImage;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 
 /** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
@@ -23,6 +32,7 @@ public class FirstScreen implements Screen {
     private final Sprite sprite;
     private final Vector2 pos;
     private final Vector2 vel;
+    private final Stage uiStage;
 
     private final float minSpeed = 300f;
     private final float maxSpeed = 500f;
@@ -38,6 +48,30 @@ public class FirstScreen implements Screen {
         this.pos = new Vector2();
         this.vel = new Vector2();
         this.speed = 0f;
+
+        var root = new VisTable();
+        root.setFillParent(true);
+        root.setDebug(true, true);
+
+        var image = new VisImage(new TextureRegionDrawable(sprite.getTexture()));
+        image.setSize(sprite.getWidth(), sprite.getHeight());
+        image.setVisible(false);
+
+        var button = new VisTextButton("Test Button");
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                image.setVisible(!image.isVisible());
+            }
+        });
+
+        root.add(button).expandX().row();
+        root.add(image).size(image.getWidth(), image.getHeight()).expand();
+
+        this.uiStage = new Stage(viewport, batch);
+        this.uiStage.addActor(root);
+
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     @Override
@@ -57,6 +91,8 @@ public class FirstScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        uiStage.act(delta);
+
         pos.add(vel.x * delta, vel.y * delta);
 
         // Bouncy bouncy
@@ -83,6 +119,8 @@ public class FirstScreen implements Screen {
         batch.begin();
         sprite.draw(batch);
         batch.end();
+
+        uiStage.draw();
     }
 
     @Override

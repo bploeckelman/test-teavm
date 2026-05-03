@@ -15,7 +15,13 @@ java.sourceCompatibility = "17"
 dependencies {
   implementation "com.github.xpenatan.gdx-teavm:backend-web:$gdxTeaVMVersion"
   implementation project(':core')
+}
 
+tasks.register("extractVisUISkin", Copy) {
+  from(zipTree(configurations.runtimeClasspath.files.find { it.name.contains("vis-ui") })) {
+    include "com/kotcrab/vis/ui/skin/**"
+  }
+  into layout.buildDirectory.dir("visui-classpath")
 }
 
 tasks.register("runRelease", JavaExec) {

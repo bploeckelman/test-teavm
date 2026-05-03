@@ -1,5 +1,6 @@
 package games.zendo.tests.teavm;
 
+import com.badlogic.gdx.Files;
 import com.github.xpenatan.gdx.teavm.backends.shared.config.AssetFileHandle;
 import com.github.xpenatan.gdx.teavm.backends.shared.config.compiler.TeaCompiler;
 import com.github.xpenatan.gdx.teavm.backends.web.config.backend.WebBackend;
@@ -38,6 +39,29 @@ public class TeaVMBuilder {
             .setSourceMapsFileGenerated(debug)
             .setSourceFilePolicy(TeaVMSourceFilePolicy.COPY)
             .addSourceFileProvider(new DirectorySourceFileProvider(new File("../core/src/main/java/")))
+            // ---------------------------------------------------------------------------------------------------------
+            // Doesn't work (likely because the String arg becomes File(...), FileType.Absolute
+//            .addAssets(AssetFileHandle.createHandle("com/kotcrab/vis/ui/skin/x1/uiskin.json", Files.FileType.Classpath))
+//            .addAssets(AssetFileHandle.createHandle("com/kotcrab/vis/ui/skin/x1/uiskin.atlas", Files.FileType.Classpath))
+//            .addAssets(AssetFileHandle.createHandle("com/kotcrab/vis/ui/skin/x1/uiskin.png", Files.FileType.Classpath))
+//            .addAssets(AssetFileHandle.createHandle("com/kotcrab/vis/ui/skin/x1/default.fnt", Files.FileType.Classpath))
+//            .addAssets(AssetFileHandle.createHandle("com/kotcrab/vis/ui/skin/x1/font-small.fnt", Files.FileType.Classpath))
+            // ---------------------------------------------------------------------------------------------------------
+//            .addAssets(AssetFileHandle.createHandle(new File("build/visui-classpath").getAbsolutePath(), Files.FileType.Classpath))
+            // ---------------------------------------------------------------------------------------------------------
+            // ---------------------------------------------------------------------------------------------------------
+            // NOTE: new 'addAssets' capability added in 'gdx-teavm:-SNAPSHOT' to replicate what's done above + the gradle task to unpack classpath resources
+            .addAssets(new AssetFileHandle("com/kotcrab/vis/ui/skin/x1", Files.FileType.Classpath))
+            .addAssets(new AssetFileHandle("com/kotcrab/vis/ui/skin/x2", Files.FileType.Classpath))
+            .addAssets(new AssetFileHandle("com/kotcrab/vis/ui/widget/color/internal", Files.FileType.Classpath))
+            .addAssets(new AssetFileHandle("com/kotcrab/vis/ui/i18n/ColorPicker", Files.FileType.Classpath))
+            // ---------------------------------------------------------------------------------------------------------
+            // ---------------------------------------------------------------------------------------------------------
+            // NOTE: xpe collapsed the big list of individual reflection classes into just these:
+            // didn't realize that it supported '**' style globbing like this!
+            .addReflectionClass("com.kotcrab.vis.ui.**Style")
+            .addReflectionClass("com.kotcrab.vis.ui.Sizes")
+            // ---------------------------------------------------------------------------------------------------------
             // You can also register any classes or packages that require reflection here:
             //.addReflectionClass("games.zendo.tests.reflect")
             // ---------------------------------------------------------------------------------------------------------
@@ -47,40 +71,40 @@ public class TeaVMBuilder {
             //
             // https://github.com/kotcrab/vis-ui/blob/master/ui/src/main/resources/com/kotcrab/vis/vis-ui.gwt.xml
             //
-            .addReflectionClass("com.kotcrab.vis.ui.Sizes")
-            .addReflectionClass("com.kotcrab.vis.ui.widget")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.spinner")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.dialog")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.color")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.tabbedpane")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.toast")
-            .addReflectionClass("com.kotcrab.vis.ui.util.form")
-            .addReflectionClass("com.kotcrab.vis.ui.util.adapter.SimpleListAdapter")
-            // "com.kotcrab.vis.ui.widget.file" // NOTE: this is 'gdx-reflect-exclude' in vis-ui.gwt.xml!
-            .addReflectionClass("com.kotcrab.vis.ui.widget.file.FileChooserStyle")
-            // ---------------------------------------------------------------------------------------------------------
-            // Additional reflection classes/packages required that weren't in vis-ui.gwt.xml:
-            .addReflectionClass("com.kotcrab.vis.ui.util.form.SimpleFormValidator$FormValidatorStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.ListViewStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.Menu$MenuStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.MenuBar$MenuBarStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.MenuItem$MenuItemStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.MultiSplitPane$MultiSplitPaneStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.Separator$SeparatorStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisSplitPane$VisSplitPaneStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.color.ColorPickerStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.color.ColorPickerWidgetStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.spinner.Spinner$SpinnerStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle")
-            .addReflectionClass("com.kotcrab.vis.ui.widget.toast.Toast$ToastStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.Sizes")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.spinner")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.dialog")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.color")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.tabbedpane")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.toast")
+//            .addReflectionClass("com.kotcrab.vis.ui.util.form")
+//            .addReflectionClass("com.kotcrab.vis.ui.util.adapter.SimpleListAdapter")
+//            // "com.kotcrab.vis.ui.widget.file" // NOTE: this is 'gdx-reflect-exclude' in vis-ui.gwt.xml!
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.file.FileChooserStyle")
+//            // ---------------------------------------------------------------------------------------------------------
+//            // Additional reflection classes/packages required that weren't in vis-ui.gwt.xml:
+//            .addReflectionClass("com.kotcrab.vis.ui.util.form.SimpleFormValidator$FormValidatorStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.ListViewStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.Menu$MenuStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.MenuBar$MenuBarStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.MenuItem$MenuItemStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.MultiSplitPane$MultiSplitPaneStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.Separator$SeparatorStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisSplitPane$VisSplitPaneStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.color.ColorPickerStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.color.ColorPickerWidgetStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.spinner.Spinner$SpinnerStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle")
+//            .addReflectionClass("com.kotcrab.vis.ui.widget.toast.Toast$ToastStyle")
             // ---------------------------------------------------------------------------------------------------------
             .build(new File("build/dist"));
     }

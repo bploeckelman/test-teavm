@@ -14,23 +14,36 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        //
+        // ***2026-05-03***: latest snapshot fixes this!
+        // https://github.com/xpenatan/gdx-teavm/issues/175
+        //
+        // See also: teavm/**/TeaVMBuilder.java for req'd config:
+        // - .addAssets(..., Files.FileType.Classpath)
+        // - .addReflectionClass(...)
+        //
+        VisUI.load(VisUI.SkinScale.X2);
+
+        // ***2026-05-03***: no longer applicable
         // NOTE: VisUI is a TeaVM breaker, only if loaded - comment out both VisUI.load(...)'s and it works
         //  - doesn't matter if built-in (library classpath) skin or same skin loaded from internal assets
         //  - doesn't matter if TeaVMBuilder includes .addReflectionClass(...) with same
         //  - with correct reflection classes, still fails to load built-in classpath skin
-        // ***FAILS***: Load built-in skin from library classpath
+        // ~~FAILS: Load built-in skin from library classpath~~
         //VisUI.load();
+//        VisUI.load(VisUI.SkinScale.X1);
         // ***WORKS*** (with correct reflection classes): Load built-in skin from internal assets (same files as built-in skin from library)
-        VisUI.load(Gdx.files.internal("skins/visui-1x-default/uiskin.json"));
+//        VisUI.load(Gdx.files.internal("skins/visui-1x-default/uiskin.json"));
 
         // --------------------------------------------------------------------
+        // ***2026-05-03***: still not working in latest snapshot
         // TeaVM Infinite Loop
         // - LWJGL3: GdxRuntimeException: Couldn't load dependencies of asset: does-not-exist.png
         // - GWT: GdxRuntimeException: Could not submit AsyncTask: Couldn't load image 'does-not-exist.png', file does not exist
         // - TeaVM: black screen, infinite loop, browser hangs
-        var mgr = new AssetManager();
-        mgr.load("does-not-exist.png", Texture.class);
-        mgr.finishLoading();
+//        var mgr = new AssetManager();
+//        mgr.load("does-not-exist.png", Texture.class);
+//        mgr.finishLoading();
         // --------------------------------------------------------------------
 
         setScreen(new FirstScreen());
